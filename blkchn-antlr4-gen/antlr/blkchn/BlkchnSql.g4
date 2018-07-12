@@ -348,6 +348,7 @@ valueExpression
     | left=valueExpression operator=HAT right=valueExpression                                #arithmeticBinary
     | left=valueExpression operator=PIPE right=valueExpression                               #arithmeticBinary
     | left=valueExpression comparisonOperator right=valueExpression                          #comparison
+    | QUESTIONMARK                                                                           #placeholder
     ;
     
 primaryExpression
@@ -609,6 +610,7 @@ TILDE: '~';
 AMPERSAND: '&';
 PIPE: '|';
 HAT: '^';
+QUESTIONMARK: '?';
 
 PERCENTLIT: 'PERCENT';
 OUT: 'OUT';

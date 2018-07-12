@@ -73,6 +73,7 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.PlaceholderContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
@@ -96,6 +97,9 @@ import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.IdentifierNode.IdentType;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
+
+import com.impetus.blkch.sql.query.Placeholder;
+import com.impetus.blkch.sql.query.QuantifierNode;
 import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
 import com.impetus.blkch.sql.query.Table;
 import com.impetus.blkch.sql.smartcontract.*;
@@ -107,13 +111,21 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
 
     Query query;
+
     CreateFunction crtFunction;
+
     ClassName className;
+
     Insert insert;
+
     CallFunction callFunction;
+
     CreateAsset createAsset;
+
     DeleteFunction deleteFunction;
+
     DropAsset dropAsset;
+
     UpgradeFunction upgradeFunction;
     SmartContractFunction smartContractFunction;
     SmartCnrtDeploy smartCnrtDeploy;
@@ -546,6 +558,15 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(upgradeFunction);
         logicalPlan.setType(SQLType.UPGRADE_FUNCTION);
         return visitChildrenAndResetNode(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitPlaceholder(PlaceholderContext ctx) {
+        logger.trace("In visitPlaceholder " + ctx.getText());
+        TreeNode node = new Placeholder();
+        logicalPlan.getCurrentNode().addChildNode(node);
+        return defaultResult();
+
     }
 
     @Override

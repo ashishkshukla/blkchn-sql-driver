@@ -22,8 +22,10 @@ import org.slf4j.LoggerFactory;
 import com.impetus.blkch.sql.generated.*;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.*;
 
-public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan>
-    implements BlkchnSqlVisitor<LogicalPlan> {
+
+public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
+        BlkchnSqlVisitor<LogicalPlan> {
+
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
 
@@ -857,6 +859,10 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     @Override
     public LogicalPlan visitDeploySmartContract(DeploySmartContractContext ctx) {
         logger.trace("In visitDeploySmartContract " + ctx.getText());
+        return visitChildren(ctx);
+    }
+    public LogicalPlan visitPlaceholder(PlaceholderContext ctx) {
+        logger.trace("In visitPlaceholder " + ctx.getText());
         return visitChildren(ctx);
     }
 

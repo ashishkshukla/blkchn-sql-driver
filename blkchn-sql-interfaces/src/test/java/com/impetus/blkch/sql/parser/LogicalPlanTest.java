@@ -83,12 +83,28 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan logicalPlan = buildSimpleSelect();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-
+    
+    @Test
+    public void testPlaceHolder() {
+        String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? group by blocknumber";
+        LogicalPlan plan = getLogicalPlan(sql);
+        System.out.println("traverse plan");
+        plan.getQuery().traverse();
+      //  plan.getQuery().getChildNode(2).getChildNode(0).removeChildNode(2);
+        System.out.println("traverse query");
+        plan.getQuery().traverse();
+        System.out.println("its normal");
+        IdentifierNode identNode= new IdentifierNode("1234");
+        TreeNode node=plan.getQuery().getChildNode(2).getChildNode(0).setChildNode(identNode,2);
+       // plan.getQuery().getChildNode(2).getChildNode(0).se;
+        plan.getQuery().traverse();;
+        //TODO-ADD PROPER TEST CASE
+    }
+    
     @Test
     public void testSimpleSelectWithWhereClause() {
         String sql = "select a, b from TRANSACTION t where a = 'hello world'";
         LogicalPlan plan = getLogicalPlan(sql);
-
         LogicalPlan logicalPlan = buildSelectWithWhere();
 
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
