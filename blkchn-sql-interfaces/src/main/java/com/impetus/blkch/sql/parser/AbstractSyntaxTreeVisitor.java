@@ -22,10 +22,8 @@ import org.slf4j.LoggerFactory;
 import com.impetus.blkch.sql.generated.*;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.*;
 
-
-public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan> implements
-        BlkchnSqlVisitor<LogicalPlan> {
-
+public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor<LogicalPlan>
+        implements BlkchnSqlVisitor<LogicalPlan> {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractSyntaxTreeVisitor.class);
 
@@ -737,12 +735,6 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     }
 
     @Override
-    public LogicalPlan visitConstantSeq(ConstantSeqContext ctx) {
-        logger.trace("In visitConstantSeq " + ctx.getText());
-        return visitChildren(ctx);
-    }
-
-    @Override
     public LogicalPlan visitCreateAssetRule(CreateAssetRuleContext ctx) {
         logger.trace("In visitCreateAssetRule " + ctx.getText());
         return visitChildren(ctx);
@@ -839,14 +831,14 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
     }
 
     @Override
-    public LogicalPlan visitList(ListContext ctx) {
-        logger.trace("In visitList " + ctx.getText());
+    public LogicalPlan visitColumnValue(ColumnValueContext ctx) {
+        logger.trace("In visitColumnValue " + ctx.getText());
         return visitChildren(ctx);
     }
 
     @Override
-    public LogicalPlan visitSmartFunction(SmartFunctionContext ctx) {
-        logger.trace("In visitSmartFunction " + ctx.getText());
+    public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
+        logger.trace("In visitQuestionMark " + ctx.getText());
         return visitChildren(ctx);
     }
 
@@ -861,8 +853,64 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
         logger.trace("In visitDeploySmartContract " + ctx.getText());
         return visitChildren(ctx);
     }
+
+    @Override
     public LogicalPlan visitPlaceholder(PlaceholderContext ctx) {
         logger.trace("In visitPlaceholder " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitDeploySmartContractRule(DeploySmartContractRuleContext ctx) {
+        logger.trace("In visitDeploySmartContractRule " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitBytes(BytesContext ctx) {
+        logger.trace("In visitBytes " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitList(ListContext ctx) {
+        logger.trace("In visitList " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitListType(ListTypeContext ctx) {
+        logger.trace("In visitListType " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitSmartFunction(SmartFunctionContext ctx) {
+        logger.trace("In visitSmartFunction " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitCheckIsValid(CheckIsValidContext ctx) {
+        logger.trace("In visitCheckIsValid " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitClassOption(ClassOptionContext ctx) {
+        logger.trace("In visitClassOption " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitAddressVlaue(AddressVlaueContext ctx) {
+        logger.trace("In visitAddressVlaue " + ctx.getText());
+        return visitChildren(ctx);
+    }
+
+    @Override
+    public LogicalPlan visitAsyncOption(AsyncOptionContext ctx) {
+        logger.trace("In visitAsyncOption " + ctx.getText());
         return visitChildren(ctx);
     }
 

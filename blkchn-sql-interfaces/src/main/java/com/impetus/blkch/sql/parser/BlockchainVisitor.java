@@ -73,8 +73,8 @@ import com.impetus.blkch.sql.generated.BlkchnSqlParser.NamedExpressionContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.NumericLiteralContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.OrderByClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.ParameterValuesContext;
-import com.impetus.blkch.sql.generated.BlkchnSqlParser.PlaceholderContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.PolicyFileContext;
+import com.impetus.blkch.sql.generated.BlkchnSqlParser.QuestionMarkContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.RecordDelimiterContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SelectClauseContext;
 import com.impetus.blkch.sql.generated.BlkchnSqlParser.SetQuantifierContext;
@@ -561,12 +561,11 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     @Override
-    public LogicalPlan visitPlaceholder(PlaceholderContext ctx) {
-        logger.trace("In visitPlaceholder " + ctx.getText());
+    public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
+        logger.trace("In hello " + ctx.getText());
         TreeNode node = new Placeholder();
         logicalPlan.getCurrentNode().addChildNode(node);
         return defaultResult();
-
     }
 
     @Override
@@ -658,5 +657,4 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
         logicalPlan.setCurrentNode(args);
         return visitChildrenAndResetNode(ctx);
     }
-
 }
