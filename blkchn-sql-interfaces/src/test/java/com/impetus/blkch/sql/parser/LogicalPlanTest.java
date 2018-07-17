@@ -75,7 +75,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 public class LogicalPlanTest extends TestCase {
-
     @Test
     public void testSimpleSelect() {
         String sql = "select a, b from TRANSACTION t";
@@ -84,15 +83,15 @@ public class LogicalPlanTest extends TestCase {
         LogicalPlan logicalPlan = buildSimpleSelect();
         assertTrue(logicalPlan.getQuery().equals(plan.getQuery()));
     }
-    
+
     @Test
     public void testPlaceHolder() {
         String sql = "select count(*) as cnt, blocknumber from transaction where blocknumber = ? group by blocknumber";
         LogicalPlan plan = getLogicalPlan(sql);
         plan.getQuery().traverse();
-       TreeNode node= plan.getQuery().getChildType(WhereClause.class,0).getChildType(FilterItem.class,0);
-       
-       assertTrue(node.hasChildType(Placeholder.class));
+        TreeNode node = plan.getQuery().getChildType(WhereClause.class, 0).getChildType(FilterItem.class, 0);
+
+        assertTrue(node.hasChildType(Placeholder.class));
     }
 
     @Test

@@ -562,8 +562,8 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
 
     @Override
     public LogicalPlan visitQuestionMark(QuestionMarkContext ctx) {
-        logger.trace("In hello " + ctx.getText());
-        TreeNode node = new Placeholder();
+        logger.trace("In visitQuestionMark " + ctx.getText());
+        TreeNode node = new Placeholder(ctx.getText());
         logicalPlan.getCurrentNode().addChildNode(node);
         return defaultResult();
     }
