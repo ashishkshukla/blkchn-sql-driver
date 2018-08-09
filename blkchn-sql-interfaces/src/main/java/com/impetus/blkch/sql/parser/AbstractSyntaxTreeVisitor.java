@@ -859,7 +859,6 @@ public abstract class AbstractSyntaxTreeVisitor extends AbstractParseTreeVisitor
         logger.trace("In visitPlaceholder " + ctx.getText());
         return visitChildren(ctx);
     }
-
     @Override
     public LogicalPlan visitDeploySmartContractRule(DeploySmartContractRuleContext ctx) {
         logger.trace("In visitDeploySmartContractRule " + ctx.getText());

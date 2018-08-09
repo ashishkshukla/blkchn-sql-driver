@@ -97,7 +97,6 @@ import com.impetus.blkch.sql.query.Comparator.ComparisionOperator;
 import com.impetus.blkch.sql.query.IdentifierNode.IdentType;
 import com.impetus.blkch.sql.query.LogicalOperation.Operator;
 import com.impetus.blkch.sql.query.OrderingDirection.Direction;
-
 import com.impetus.blkch.sql.query.Placeholder;
 import com.impetus.blkch.sql.query.QuantifierNode;
 import com.impetus.blkch.sql.query.QuantifierNode.Quantifier;
@@ -127,7 +126,9 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     DropAsset dropAsset;
 
     UpgradeFunction upgradeFunction;
+
     SmartContractFunction smartContractFunction;
+
     SmartCnrtDeploy smartCnrtDeploy;
 
     @Override
@@ -574,9 +575,11 @@ public class BlockchainVisitor extends AbstractSyntaxTreeVisitor {
     }
 
     /*
-     * If you call logicalPlan.setCurrentNode(node); then call this method so that node pointer can be reset to parent
-     * after visiting children. Note that this will happen recursively for each level of tree. If you are not setting
-     * current node and just creating and adding nodes to parent call visitChildren directly.
+     * If you call logicalPlan.setCurrentNode(node); then call this method so
+     * that node pointer can be reset to parent after visiting children. Note
+     * that this will happen recursively for each level of tree. If you are not
+     * setting current node and just creating and adding nodes to parent call
+     * visitChildren directly.
      */
     public LogicalPlan visitChildrenAndResetNode(RuleNode node) {
         try {
