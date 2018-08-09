@@ -15,10 +15,13 @@
 ******************************************************************************/
 package com.impetus.blkch.util.placeholder;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.impetus.blkch.sql.insert.ColumnValue;
+import com.impetus.blkch.sql.insert.Insert;
 import com.impetus.blkch.sql.parser.LogicalPlan;
+import com.impetus.blkch.sql.parser.LogicalPlanTest;
 import com.impetus.blkch.sql.parser.TreeNode;
 import com.impetus.blkch.sql.query.Column;
 import com.impetus.blkch.sql.query.Comparator;
@@ -33,6 +36,24 @@ import com.impetus.blkch.sql.query.WhereClause;
 import junit.framework.TestCase;
 
 public class TestPlaceholderLogicalPlan extends TestCase {
+    protected Object[] placeholderValues;
+
+    protected QueryPlaceholderHandler handler;
+
+    protected LogicalPlan placeHLogicalPlan;
+
+    @Before
+    public void setUp() {
+        String sql = "select a, b from TRANSACTION t where a = ?";
+        placeHLogicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
+        handler = new QueryPlaceholderHandler(placeHLogicalPlan);
+        handler.setPlaceholderIndex();
+        if (!handler.isIndexListEmpty()) {
+            this.placeholderValues = new Object[handler.getIndexListCount()];
+            placeholderValues[0] = "'hello world'";
+        }
+        handler.alterLogicalPlan(placeholderValues);
+    }
 
     @Test
     public void testLogicalPlanQueryPlaceholder() {
@@ -46,6 +67,47 @@ public class TestPlaceholderLogicalPlan extends TestCase {
         String sql = "insert into transaction (toAddress, value, unit, async) values (?, 2.22, 'ether', ?)";
         LogicalPlan logicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
         assertTrue(logicalPlan.getInsert().getChildType(ColumnValue.class, 0).equals(manualColumnValue()));
+    }
+
+    @Test
+    public void testSimpleSelectWithWhereClause() {
+        LogicalPlan logicalPlan = LogicalPlanTest.buildSelectWithWhere();
+        assertTrue(logicalPlan.getQuery().equals(placeHLogicalPlan.getQuery()));
+    }
+
+    @Test
+    public void testSimpleSelectWithMultiWhereClause() {
+        String sql = "select a, b from TRANSACTION t where a = '?' AND b = ?";
+        LogicalPlan pHLogicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
+        QueryPlaceholderHandler handler = new QueryPlaceholderHandler(pHLogicalPlan);
+        handler.setPlaceholderIndex();
+        Object[] placeholderValues;
+        if (!handler.isIndexListEmpty()) {
+            placeholderValues = new Object[handler.getIndexListCount()];
+            placeholderValues[0] = "5";
+            handler.alterLogicalPlan(placeholderValues);
+        }
+        LogicalPlan logicalPlan = buildSelectWithWherePlaceHolder();
+        assertTrue(logicalPlan.getQuery().equals(pHLogicalPlan.getQuery()));
+    }
+
+    @Test
+    public void testInsertWithPlaceHolder() {
+        /* Test Insert with place Holder at some place */
+        String sql = "INSERT INTO someTable VALUES('first', ?, 'third', 4, ?)";
+        LogicalPlan pHLogicalPlan = new LogicalPlanGen().getLogicalPlan(sql);
+        InsertPlaceholderHandler handler = new InsertPlaceholderHandler(pHLogicalPlan);
+        handler.setPlaceholderIndex();
+        Object[] placeholderValues;
+        if (!handler.isIndexListEmpty()) {
+            placeholderValues = new Object[handler.getIndexListCount()];
+            placeholderValues[0] = "'second'";
+            placeholderValues[1] = "false";
+            handler.alterLogicalPlan(placeholderValues);
+        }
+        Insert actual = pHLogicalPlan.getInsert();
+        Insert expected = LogicalPlanTest.buildInsert();
+        assertEquals(expected, actual);
     }
 
     public TreeNode manualColumnValue() {
@@ -107,5 +169,48 @@ public class TestPlaceholderLogicalPlan extends TestCase {
         filterItem3.addChildNode(plceHolder2);
         op2.addChildNode(filterItem3);
         return whereClause;
+    }
+
+    public static LogicalPlan buildSelectWithWherePlaceHolder() {
+        LogicalPlan logicalPlan = LogicalPlanTest.buildSimpleSelect();
+
+        TreeNode whereItem = new WhereClause();
+        logicalPlan.getCurrentNode().addChildNode(whereItem);
+
+        TreeNode logicalOper = new LogicalOperation(LogicalOperation.Operator.AND);
+        whereItem.addChildNode(logicalOper);
+
+        TreeNode filterItem = new FilterItem();
+        logicalOper.addChildNode(filterItem);
+
+        TreeNode col3 = new Column();
+        TreeNode ident5 = new IdentifierNode("a");
+        col3.addChildNode(ident5);
+        filterItem.addChildNode(col3);
+
+        TreeNode comprator = new Comparator(Comparator.ComparisionOperator.EQ);
+        TreeNode ident6 = new IdentifierNode("=");
+        comprator.addChildNode(ident6);
+        filterItem.addChildNode(comprator);
+
+        TreeNode ident7 = new IdentifierNode("'?'");
+        filterItem.addChildNode(ident7);
+
+        TreeNode filterItem2 = new FilterItem();
+        logicalOper.addChildNode(filterItem2);
+
+        TreeNode col4 = new Column();
+        TreeNode ident8 = new IdentifierNode("b");
+        col4.addChildNode(ident8);
+        filterItem2.addChildNode(col4);
+
+        TreeNode comprator2 = new Comparator(Comparator.ComparisionOperator.EQ);
+        TreeNode ident9 = new IdentifierNode("=");
+        comprator2.addChildNode(ident9);
+        filterItem2.addChildNode(comprator2);
+
+        TreeNode ident10 = new IdentifierNode("5");
+        filterItem2.addChildNode(ident10);
+        return logicalPlan;
     }
 }

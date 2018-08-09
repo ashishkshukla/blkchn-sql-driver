@@ -55,8 +55,9 @@ public class InsertPlaceholderHandler implements PlaceholderHandler {
     @Override
     public void setPlaceholderIndex(TreeNode node) {
         for (TreeNode child : node.getChildNodes()) {
-            if (child.getClass().isAssignableFrom((Placeholder.class)))
+            if (child.getClass().isAssignableFrom((Placeholder.class))) {
                 placeholderIndexes.add(columnValIndex);
+            }
             columnValIndex++;
 
         }

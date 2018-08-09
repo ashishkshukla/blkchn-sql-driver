@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.impetus.blkch.BlkchnException;
+import com.impetus.blkch.sql.query.IdentifierNode;
+import com.impetus.blkch.sql.query.Placeholder;
 
 public class TreeNode {
 
@@ -53,11 +55,7 @@ public class TreeNode {
     }
 
     public TreeNode setChildNode(TreeNode child, int i) {
-        if (i < childNodes.size()) {
-            this.childNodes.set(i, child);
-            return child;
-        }
-        throw new BlkchnException("Index out of Bounds " + i);
+        return setPlaceHolderNode(child, i);
     }
 
     public TreeNode getChildNode(int i) {
@@ -188,4 +186,13 @@ public class TreeNode {
         }
         return hash;
     }
+
+    private TreeNode setPlaceHolderNode(TreeNode child, int i) {
+        if (i < childNodes.size() && (child instanceof Placeholder || child instanceof IdentifierNode)) {
+            this.childNodes.set(i, child);
+            return child;
+        }
+        throw new BlkchnException("Index out of Bounds " + i);
+    }
+
 }

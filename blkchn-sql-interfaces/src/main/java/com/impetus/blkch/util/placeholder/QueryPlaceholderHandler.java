@@ -61,8 +61,9 @@ public class QueryPlaceholderHandler implements PlaceholderHandler {
             if (child.getClass().isAssignableFrom((LogicalOperation.class))) {
                 setPlaceholderIndex(child);
             } else if (child.getClass().isAssignableFrom((FilterItem.class))) {
-                if (child.hasChildType(Placeholder.class))
+                if (child.hasChildType(Placeholder.class)) {
                     placeholderIndexes.add(filterItemIndex);
+                }
                 filterItemIndex++;
             } else {
                 LOGGER.error(

@@ -487,7 +487,7 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildSimpleSelect() {
+    public static LogicalPlan buildSimpleSelect() {
         LogicalPlan logicalPlan = new LogicalPlan("BlockchainVisitor");
         Query query = new Query();
         logicalPlan.setQuery(query);
@@ -518,7 +518,7 @@ public class LogicalPlanTest extends TestCase {
         return logicalPlan;
     }
 
-    private LogicalPlan buildSelectWithWhere() {
+    public static LogicalPlan buildSelectWithWhere() {
         LogicalPlan logicalPlan = buildSimpleSelect();
 
         TreeNode whereClause = new WhereClause();
@@ -566,7 +566,7 @@ public class LogicalPlanTest extends TestCase {
         return callFunction;
     }
 
-    private Insert buildInsert() {
+    public static Insert buildInsert() {
         Insert insert = new Insert();
         Table table = new Table();
         table.addChildNode(new IdentifierNode("someTable"));
